@@ -19,6 +19,6 @@ Import-Module Microsoft.FtpClient.Commands
 # Verbindung herstellen
 $session = New-FtpSession -Uri "ftp://FtpServer.internal"
 
-# Dateien abrufen
-Get-FtpItem -Session $session
+# Dateien und Verzeichnisse abrufen
+Get-FtpDirectory -Session $session
 ```
