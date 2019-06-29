@@ -6,20 +6,86 @@ Titel: R16.3 Ein einfacher FTP-Client
 
 #>
 
-# Upload File
+<#
+.Synopsis
+   Eine Datei auf einem Ftp hochladen.
+.DESCRIPTION
+   Lange Beschreibung
+.EXAMPLE
+   Beispiel für die Verwendung dieses Cmdlets
+.EXAMPLE
+   Ein weiteres Beispiel für die Verwendung dieses Cmdlets
+#>
 function New-FtpFile
 {
+    [CmdletBinding(DefaultParameterSetName='Default', 
+                  SupportsShouldProcess=$false, 
+                  PositionalBinding=$false,
+                  HelpUri = 'https://github.com/lmissel/Microsoft.FtpClient.Commands',
+                  ConfirmImpact='Medium')]
+    [Alias()]
+    [OutputType([String])]
     param(
+        [Parameter(Mandatory=$true, 
+                   ValueFromPipeline=$true,
+                   ValueFromPipelineByPropertyName=$true, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=0,
+                   ParameterSetName='Default')]
+        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
         [String] $fileName,
+
+        [Parameter(Mandatory=$true, 
+                   ValueFromPipeline=$true,
+                   ValueFromPipelineByPropertyName=$true, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=1,
+                   ParameterSetName='Default')]
+        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
         [uri] $uri,
 
+        [Parameter(Mandatory=$true, 
+                   ValueFromPipeline=$true,
+                   ValueFromPipelineByPropertyName=$true, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=2,
+                   ParameterSetName='Default')]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.Credential()]
         $Credential, 
-        
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=3,
+                   ParameterSetName='Default')]
         [Switch]$EnableSsl = $False,
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=4,
+                   ParameterSetName='Default')]
 		[Switch]$KeepAlive = $False,
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=5,
+                   ParameterSetName='Default')]
 		[Switch]$UseBinary = $False,
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=6,
+                   ParameterSetName='Default')]
 		[Switch]$UsePassive = $False
     )
 
@@ -117,16 +183,63 @@ function New-FtpFile
 # List Directory
 function Get-FtpDirectory
 {
+    [CmdletBinding(DefaultParameterSetName='Default', 
+                  SupportsShouldProcess=$false, 
+                  PositionalBinding=$false,
+                  HelpUri = 'https://github.com/lmissel/Microsoft.FtpClient.Commands',
+                  ConfirmImpact='Medium')]
+    [Alias()]
     param(
-        [String] $uri,
+        [Parameter(Mandatory=$true, 
+                   ValueFromPipeline=$true,
+                   ValueFromPipelineByPropertyName=$true, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=0,
+                   ParameterSetName='Default')]
+        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
+        [uri] $uri,
 
+        [Parameter(Mandatory=$true, 
+                   ValueFromPipeline=$true,
+                   ValueFromPipelineByPropertyName=$true, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=1,
+                   ParameterSetName='Default')]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.Credential()]
         $Credential, 
-        
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=2,
+                   ParameterSetName='Default')]
         [Switch]$EnableSsl = $False,
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=3,
+                   ParameterSetName='Default')]
 		[Switch]$KeepAlive = $False,
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=4,
+                   ParameterSetName='Default')]
 		[Switch]$UseBinary = $False,
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=5,
+                   ParameterSetName='Default')]
 		[Switch]$UsePassive = $False
     )
 
@@ -187,16 +300,63 @@ function Get-FtpDirectory
 # Download File
 function Get-FtpFile
 {
+    [CmdletBinding(DefaultParameterSetName='Default', 
+                  SupportsShouldProcess=$false, 
+                  PositionalBinding=$false,
+                  HelpUri = 'https://github.com/lmissel/Microsoft.FtpClient.Commands',
+                  ConfirmImpact='Medium')]
+    [Alias()]
     param(
+        [Parameter(Mandatory=$true, 
+                   ValueFromPipeline=$true,
+                   ValueFromPipelineByPropertyName=$true, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=0,
+                   ParameterSetName='Default')]
+        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
         [uri] $uri,
 
+        [Parameter(Mandatory=$true, 
+                   ValueFromPipeline=$true,
+                   ValueFromPipelineByPropertyName=$true, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=1,
+                   ParameterSetName='Default')]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.Credential()]
         $Credential, 
-        
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=2,
+                   ParameterSetName='Default')]
         [Switch]$EnableSsl = $False,
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=3,
+                   ParameterSetName='Default')]
 		[Switch]$KeepAlive = $False,
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=4,
+                   ParameterSetName='Default')]
 		[Switch]$UseBinary = $False,
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=5,
+                   ParameterSetName='Default')]
 		[Switch]$UsePassive = $False
     )
 
@@ -281,16 +441,63 @@ function Get-FtpFile
 # Remove File
 function Remove-FtpFile
 {
+    [CmdletBinding(DefaultParameterSetName='Default', 
+                  SupportsShouldProcess=$false, 
+                  PositionalBinding=$false,
+                  HelpUri = 'https://github.com/lmissel/Microsoft.FtpClient.Commands',
+                  ConfirmImpact='Medium')]
+    [Alias()]
     param(
+        [Parameter(Mandatory=$true, 
+                   ValueFromPipeline=$true,
+                   ValueFromPipelineByPropertyName=$true, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=0,
+                   ParameterSetName='Default')]
+        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
         [uri] $uri,
 
+        [Parameter(Mandatory=$true, 
+                   ValueFromPipeline=$true,
+                   ValueFromPipelineByPropertyName=$true, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=1,
+                   ParameterSetName='Default')]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.Credential()]
         $Credential, 
-        
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=2,
+                   ParameterSetName='Default')]
         [Switch]$EnableSsl = $False,
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=3,
+                   ParameterSetName='Default')]
 		[Switch]$KeepAlive = $False,
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=4,
+                   ParameterSetName='Default')]
 		[Switch]$UseBinary = $False,
+
+        [Parameter(Mandatory=$false, 
+                   ValueFromPipeline=$false,
+                   ValueFromPipelineByPropertyName=$false, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=5,
+                   ParameterSetName='Default')]
 		[Switch]$UsePassive = $False
     )
 
