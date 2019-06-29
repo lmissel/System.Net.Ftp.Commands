@@ -1,20 +1,12 @@
 <#
-
-Kapitel 16: Komplexebeispiele
-Seite: 1074 - 1082
-Titel: R16.3 Ein einfacher FTP-Client
-
-#>
-
-<#
 .Synopsis
-   Eine Datei auf einem Ftp hochladen.
+   Eine Datei auf einem Ftp-Server hochladen.
 .DESCRIPTION
-   Lange Beschreibung
+   Die Mthode benÃ¶tigt als parameter den Namen der hochzuladenden Datei, die URL, unter
+   welcher diese Datei auf dem Ftp-Server erreichbar sein soll, sowie ggfs. einen Benutzernamen
+   und ein Passwort.
 .EXAMPLE
-   Beispiel für die Verwendung dieses Cmdlets
-.EXAMPLE
-   Ein weiteres Beispiel für die Verwendung dieses Cmdlets
+   New-FtpFile -FileName MeineDatei.txt -URI ftp://my.intern/MeineDatei.txt
 #>
 function New-FtpFile
 {
@@ -103,7 +95,7 @@ function New-FtpFile
             # Request erzeugen
             [System.Net.FtpWebRequest] $FtpWebRequest = [System.Net.FtpWebRequest][System.Net.WebRequest]::Create($uri)
             
-            # Ausführende Aktion festlegen
+            # AusfÃ¼hrende Aktion festlegen
             $FtpWebRequest.Method = [System.Net.WebRequestMethods+Ftp]::UploadFile
 
             if ($Credentials)
@@ -116,8 +108,8 @@ function New-FtpFile
             $FtpWebRequest.UseBinary = $UseBinary
             $FtpWebRequest.UsePassive = $UsePassive
 
-            # UploadFile wird nicht von einem Http-Proxy unterstützt, 
-            # daher deaktivieren wir den Proxy für diese Anfrage.
+            # UploadFile wird nicht von einem Http-Proxy unterstÃ¼tzt, 
+            # daher deaktivieren wir den Proxy fÃ¼r diese Anfrage.
             $FtpWebRequest.Proxy = $null
 
             $Stream = $FtpWebRequest.GetRequestStream()
@@ -157,7 +149,7 @@ function New-FtpFile
         }
         finally
         {
-            # Alles schließen
+            # Alles schlieÃŸen
             if ($FtpWebResponse)
             {
                 $FtpWebResponse.Close()
@@ -180,7 +172,15 @@ function New-FtpFile
     }
 }
 
-# List Directory
+<#
+.Synopsis
+   Diese Methode liestet die Inhaltes des angegebenen FTP-Verzeichnis auf.
+.DESCRIPTION
+   Der Methode werden als Parameter die URL des FTP-Verzeichnisses sowie ggfs. 
+   einen Benutzernamen und ein Passwort Ã¼bergeben.
+.EXAMPLE
+   Get-FtpDirectory -URI ftp://my.intern/
+#>
 function Get-FtpDirectory
 {
     [CmdletBinding(DefaultParameterSetName='Default', 
@@ -265,13 +265,13 @@ function Get-FtpDirectory
             $FtpWebRequest.UseBinary = $UseBinary
             $FtpWebRequest.UsePassive = $UsePassive
 
-            # Ausführende Aktion festlegen
+            # Ausfï¿½hrende Aktion festlegen
             $FtpWebRequest.Method = [System.Net.WebRequestMethods+Ftp]::ListDirectory
             [System.Net.FtpWebResponse] $FtpWebResponse = [System.Net.FtpWebResponse]$FtpWebRequest.GetResponse()
             $StreamReader = [System.IO.StreamReader]::new($FtpWebResponse.GetResponseStream())
             $StreamReader.ReadToEnd()
 
-            #Ausgabe abschließen
+            #Ausgabe abschlieï¿½en
             Write-Host "Auflistung komplett."
 
         }
@@ -297,7 +297,15 @@ function Get-FtpDirectory
     }
 }
 
-# Download File
+<#
+.Synopsis
+   Herunterladen einer Datei per FTP.
+.DESCRIPTION
+   Der Methode werden als Parameter die URL der herunterzuladenden FTP-Datei sowie ggfs. 
+   einen Benutzernamen und ein Passwort Ã¼bergeben.
+.EXAMPLE
+   Get-FtpFile -URI ftp://my.intern/MeineTest.txt
+#>
 function Get-FtpFile
 {
     [CmdletBinding(DefaultParameterSetName='Default', 
@@ -385,7 +393,7 @@ function Get-FtpFile
             $FtpWebRequest.UseBinary = $UseBinary
             $FtpWebRequest.UsePassive = $UsePassive
 
-            # Ausführende Aktion festlegen
+            # Ausfï¿½hrende Aktion festlegen
             $FtpWebRequest.Method = [System.Net.WebRequestMethods+Ftp]::DownloadFile
             $FtpWebResponse = [System.Net.FtpWebResponse] $FtpWebRequest.GetResponse()
             $Stream = $FtpWebResponse.GetResponseStream()
@@ -395,7 +403,7 @@ function Get-FtpFile
             $SaveFileDialog.FileName = [System.IO.Path]::GetFileName($FtpWebRequest.RequestUri.LocalPath)
             if ($SaveFileDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::Ok)
             {
-                # Öffnen der Zieldatei
+                # ï¿½ffnen der Zieldatei
                 $FileStream = [System.IO.File]::Create($SaveFileDialog.FileName)
                 [byte[]] $buffer = [byte[]]::new(1024)
                 [int] $byteRead = 0
@@ -438,7 +446,15 @@ function Get-FtpFile
     }
 }
 
-# Remove File
+<#
+.Synopsis
+   LÃ¶schen einer Datei im FTP-Verzeichnis.
+.DESCRIPTION
+   Die Methode braucht als Parameter die URL der zu lÃ¶schenden FTP-Datei sowie ggfs. 
+   einen Benutzernamen und ein Passwort Ã¼bergeben.
+.EXAMPLE
+   Get-FtpFile -URI ftp://my.intern/MeineTest.txt
+#>
 function Remove-FtpFile
 {
     [CmdletBinding(DefaultParameterSetName='Default', 
@@ -524,11 +540,11 @@ function Remove-FtpFile
             $FtpWebRequest.UseBinary = $UseBinary
             $FtpWebRequest.UsePassive = $UsePassive
 
-            # Ausführende Aktion festlegen
+            # Ausfï¿½hrende Aktion festlegen
             $FtpWebRequest.Method = [System.Net.WebRequestMethods+Ftp]::DeleteFile
             $FtpWebResponse = [System.Net.FtpWebResponse] $FtpWebRequest.GetResponse()
 
-            Write-Host "Datei wurde gelöscht!"
+            Write-Host "Datei wurde gelï¿½scht!"
         }
         catch [System.UriFormatException]
         {
