@@ -393,7 +393,7 @@ function Get-FtpFile
             $FtpWebRequest.UseBinary = $UseBinary
             $FtpWebRequest.UsePassive = $UsePassive
 
-            # Ausf�hrende Aktion festlegen
+            # Ausführende Aktion festlegen
             $FtpWebRequest.Method = [System.Net.WebRequestMethods+Ftp]::DownloadFile
             $FtpWebResponse = [System.Net.FtpWebResponse] $FtpWebRequest.GetResponse()
             $Stream = $FtpWebResponse.GetResponseStream()
@@ -403,7 +403,7 @@ function Get-FtpFile
             $SaveFileDialog.FileName = [System.IO.Path]::GetFileName($FtpWebRequest.RequestUri.LocalPath)
             if ($SaveFileDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::Ok)
             {
-                # �ffnen der Zieldatei
+                # Öffnen der Zieldatei
                 $FileStream = [System.IO.File]::Create($SaveFileDialog.FileName)
                 [byte[]] $buffer = [byte[]]::new(1024)
                 [int] $byteRead = 0
@@ -540,11 +540,11 @@ function Remove-FtpFile
             $FtpWebRequest.UseBinary = $UseBinary
             $FtpWebRequest.UsePassive = $UsePassive
 
-            # Ausf�hrende Aktion festlegen
+            # Ausführende Aktion festlegen
             $FtpWebRequest.Method = [System.Net.WebRequestMethods+Ftp]::DeleteFile
             $FtpWebResponse = [System.Net.FtpWebResponse] $FtpWebRequest.GetResponse()
 
-            Write-Host "Datei wurde gel�scht!"
+            Write-Host "Datei wurde gelöscht!"
         }
         catch [System.UriFormatException]
         {
