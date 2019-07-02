@@ -200,14 +200,14 @@ function Get-FtpDirectory
         [ValidateNotNullOrEmpty()]
         [uri] $uri,
 
-        [Parameter(Mandatory=$true, 
+        [Parameter(Mandatory=$false, 
                    ValueFromPipeline=$true,
                    ValueFromPipelineByPropertyName=$true, 
                    ValueFromRemainingArguments=$false, 
                    Position=1,
                    ParameterSetName='Default')]
         [System.Management.Automation.PSCredential]
-        [System.Management.Automation.Credential()]
+        #[System.Management.Automation.Credential()]
         $Credential, 
 
         [Parameter(Mandatory=$false, 
@@ -259,9 +259,13 @@ function Get-FtpDirectory
             {
                 $FtpWebRequest.Credentials = $Credentials
             }
+            else
+            {
+                $FtpWebRequest.Credentials = new-object System.Net.NetworkCredential("anonymous","anonymous@localhost")
+            }
 
             $FtpWebRequest.EnableSsl = $EnableSsl
-            $FtpWebRequest.KeepAlive = $Credentials
+            $FtpWebRequest.KeepAlive = $KeepAlive
             $FtpWebRequest.UseBinary = $UseBinary
             $FtpWebRequest.UsePassive = $UsePassive
 
@@ -273,7 +277,6 @@ function Get-FtpDirectory
 
             #Ausgabe abschlie�en
             Write-Host "Auflistung komplett."
-
         }
         catch [System.UriFormatException]
         {
