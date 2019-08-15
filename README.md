@@ -1,4 +1,4 @@
-# Microsoft.FtpClient.Commands
+# System.Net.Ftp.Commands
 
 Dieses Powershell Modul stellt eine Reihe von Klassen, Enumerationen und Methoden zur Verfügung, um mit der PowerShell Dateien von einem Ftp-Server herunter- oder hochzuladen bzw. zu erstellen oder zu löschen. Dabei wird Wert auf ein Simple Design gelegt, und deshalb auch keine weiteren Funktionen unterstützt. Ebenso soll keine Verwaltung vom FTP-Server stattfinden sondern es wird sich ausschließlich auf die Clientseite beschränkt.
 
@@ -14,7 +14,7 @@ Laden Sie das Modul in die PowerShell Sitzung und starten Sie mit dem Herstellen
 
 ```PowerShell
 # Laden des Modules
-Import-Module Microsoft.FtpClient.Commands
+Import-Module System.Net.Ftp.Commands
 
 # Verbindung herstellen
 $session = New-FtpSession -Uri "ftp://FtpServer.internal"
