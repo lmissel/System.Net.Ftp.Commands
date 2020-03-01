@@ -86,6 +86,9 @@ function New-FtpFile
         [System.IO.Stream] $Stream = $null
         [System.IO.FileStream] $FileStream = $null
         [System.Net.FtpWebResponse] $FtpWebResponse = $null
+
+        # Der Parameter serverUri sollte mit dem ftp:// scheme beginnen.
+        if (-not (Test-UriSchemeFtp -uri $uri)) { throw "This is not a ftp-uri." }
     }
 
     Process
@@ -133,7 +136,6 @@ function New-FtpFile
             # Antwort holen
             $Stream.Close()
             $FtpWebResponse = [System.Net.FtpWebResponse]$FtpWebRequest.GetResponse()
-            Write-Host "Upload complete."
         }
         catch [System.UriFormatException]
         {
@@ -246,6 +248,9 @@ function Get-FtpDirectory
     Begin
     {
         [System.IO.StreamReader] $StreamReader = $null
+
+        # Der Parameter serverUri sollte mit dem ftp:// scheme beginnen.
+        if (-not (Test-UriSchemeFtp -uri $uri)) { throw "This is not a ftp-uri." }
     }
 
     Process
@@ -275,8 +280,6 @@ function Get-FtpDirectory
             $StreamReader = [System.IO.StreamReader]::new($FtpWebResponse.GetResponseStream())
             $StreamReader.ReadToEnd()
 
-            #Ausgabe abschlie�en
-            Write-Host "Auflistung komplett."
         }
         catch [System.UriFormatException]
         {
@@ -328,7 +331,7 @@ function Get-FtpFile
         [ValidateNotNullOrEmpty()]
         [uri] $uri,
 
-        [Parameter(Mandatory=$true, 
+        [Parameter(Mandatory=$false, 
                    ValueFromPipeline=$true,
                    ValueFromPipelineByPropertyName=$true, 
                    ValueFromRemainingArguments=$false, 
@@ -377,6 +380,9 @@ function Get-FtpFile
         [System.IO.FileStream] $FileStream = $null
         [System.Net.FtpWebResponse] $FtpWebResponse = $null
         [System.Net.FtpWebRequest] $FtpWebRequest = $null
+
+        # Der Parameter serverUri sollte mit dem ftp:// scheme beginnen.
+        if (-not (Test-UriSchemeFtp -uri $uri)) { throw "This is not a ftp-uri." }
     }
 
     Process
@@ -390,9 +396,13 @@ function Get-FtpFile
             {
                 $FtpWebRequest.Credentials = $Credentials
             }
+            else
+            {
+                $FtpWebRequest.Credentials = new-object System.Net.NetworkCredential("anonymous","anonymous@localhost")
+            }
 
             $FtpWebRequest.EnableSsl = $EnableSsl
-            $FtpWebRequest.KeepAlive = $Credentials
+            $FtpWebRequest.KeepAlive = $KeepAlive
             $FtpWebRequest.UseBinary = $UseBinary
             $FtpWebRequest.UsePassive = $UsePassive
 
@@ -406,23 +416,14 @@ function Get-FtpFile
             $SaveFileDialog.FileName = [System.IO.Path]::GetFileName($FtpWebRequest.RequestUri.LocalPath)
             if ($SaveFileDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::Ok)
             {
-                # Öffnen der Zieldatei
-                $FileStream = [System.IO.File]::Create($SaveFileDialog.FileName)
-                [byte[]] $buffer = [byte[]]::new(1024)
-                [int] $byteRead = 0
+                $FileStream = [System.IO.FileStream]::new($SaveFileDialog.FileName,[IO.FileMode]::Create)
+                [byte[]]$readbuffer = [byte[]]::new(1024)
 
-                # Einlesen und in Datei kopieren
-                while ($true)
-                {
-                    $byteRead = $Stream.Read($buffer, 0, $buffer.Length)
-                    if ($byteRead -eq 0)
-                    {
-                        break
-                    }
-                    $Stream.Write($buffer, 0, $byteRead)
+                do{
+                    $readlength = $Stream.Read($readbuffer,0,1024)
+                    $FileStream.Write($readbuffer,0,$readlength)
                 }
-
-                Write-Host "Download komplett."
+                while ($readlength -ne 0)
             }
         }
         catch [System.UriFormatException]
@@ -524,6 +525,9 @@ function Remove-FtpFile
     {
         [System.Net.FtpWebResponse] $FtpWebResponse = $null
         [System.Net.FtpWebRequest] $FtpWebRequest = $null
+
+        # Der Parameter serverUri sollte mit dem ftp:// scheme beginnen.
+        if (-not (Test-UriSchemeFtp -uri $uri)) { throw "This is not a ftp-uri." }
     }
 
     Process
@@ -537,17 +541,19 @@ function Remove-FtpFile
             {
                 $FtpWebRequest.Credentials = $Credentials
             }
+            else
+            {
+                $FtpWebRequest.Credentials = new-object System.Net.NetworkCredential("anonymous","anonymous@localhost")
+            }
 
             $FtpWebRequest.EnableSsl = $EnableSsl
             $FtpWebRequest.KeepAlive = $Credentials
             $FtpWebRequest.UseBinary = $UseBinary
             $FtpWebRequest.UsePassive = $UsePassive
 
-            # Ausführende Aktion festlegen
+            # Ausf�hrende Aktion festlegen
             $FtpWebRequest.Method = [System.Net.WebRequestMethods+Ftp]::DeleteFile
             $FtpWebResponse = [System.Net.FtpWebResponse] $FtpWebRequest.GetResponse()
-
-            Write-Host "Datei wurde gelöscht!"
         }
         catch [System.UriFormatException]
         {
@@ -565,5 +571,19 @@ function Remove-FtpFile
 
     End
     {
+    }
+}
+
+function Test-UriSchemeFtp
+{
+    param([Uri] $uri)
+
+    if ($uri.Scheme -eq [Uri]::UriSchemeFtp)
+    {
+        return $true
+    }
+    else
+    {
+        return $false
     }
 }
